@@ -60,6 +60,7 @@
         });
 
         // Set editor data when view data change.
+        /*
         ngModelController.$render = function syncEditor() {
           controller.ready().then(function () {
             // "noSnapshot" prevent recording an undo snapshot
@@ -73,7 +74,8 @@
               }
             });
           });
-        };
+        }
+        */
       }
     };
   }
