@@ -7,7 +7,7 @@
 
   angular
   .module('ckeditor', [])
-  .directive('ckeditor', ['$parse', ckeditorDirective]);
+  .directive('ckeditor', ['$parse', '$interval', ckeditorDirective]);
 
   // Polyfill setImmediate function.
   var setImmediate = window && window.setImmediate ? window.setImmediate : function (fn) {
@@ -21,7 +21,7 @@
    * <div ckeditor="options" ng-model="content" ready="onReady()"></div>
    */
 
-  function ckeditorDirective($parse) {
+  function ckeditorDirective($parse, $interval) {
     return {
       restrict: 'A',
       require: ['ckeditor', 'ngModel'],
@@ -57,6 +57,11 @@
           setImmediate(function () {
             $parse(attrs.ready)(scope);
           });
+
+          // Update frequently to ensure we don't miss data
+          $interval(function() {
+            ngModelController.$setViewValue(controller.instance.getData() || '');
+          }, 500);
         });
 
         // Set editor data when view data change.
